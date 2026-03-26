@@ -5,6 +5,8 @@ import com.malgn.domain.Role;
 import com.malgn.domain.User;
 import com.malgn.dto.LoginRequest;
 import com.malgn.dto.SignUpRequest;
+import com.malgn.exception.BusinessException;
+import com.malgn.exception.ErrorCode;
 import com.malgn.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,7 +26,7 @@ public class UserService {
     @Transactional
     public void signUp(SignUpRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
+            throw new BusinessException(ErrorCode.DUPLICATE_USER);
         }
 
         String encodedPassword = passwordEncoder.encode(request.getPassword());
@@ -41,10 +43,10 @@ public class UserService {
     @Transactional
     public Map<String, String> login(LoginRequest loginRequest) {
         User user = userRepository.findByUsername(loginRequest.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 아이디입니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.LOGIN_FAILED));
 
         if(!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호 입니다");
+            throw new BusinessException(ErrorCode.LOGIN_FAILED);
         }
 
         String accessToken = jwtTokenProvider.createAccessToken(user.getUsername(), user.getRole().name());

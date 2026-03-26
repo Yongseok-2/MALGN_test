@@ -2,6 +2,8 @@ package com.malgn.configure.security;
 
 import com.malgn.configure.jwt.JwtAuthenticationFilter;
 import com.malgn.configure.jwt.JwtTokenProvider;
+import com.malgn.exception.CustomAccessDeniedHandler;
+import com.malgn.exception.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.annotation.Bean;
@@ -21,6 +23,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -40,7 +44,12 @@ public class SecurityConfiguration {
                 )
 
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-                        UsernamePasswordAuthenticationFilter.class);
+                        UsernamePasswordAuthenticationFilter.class)
+
+                .exceptionHandling(exception -> exception
+                                .authenticationEntryPoint(authenticationEntryPoint) // 401 처리
+                                .accessDeniedHandler(accessDeniedHandler)
+                );
 
         return http.build();
     }
