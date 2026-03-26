@@ -1,8 +1,10 @@
 package com.malgn.service;
 
 import com.malgn.configure.jwt.JwtTokenProvider;
+import com.malgn.domain.Role;
 import com.malgn.domain.User;
 import com.malgn.dto.LoginRequest;
+import com.malgn.dto.SignUpRequest;
 import com.malgn.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +20,23 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+
+    @Transactional
+    public void signUp(SignUpRequest request) {
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
+        }
+
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+
+        User user = User.builder()
+                .username(request.getUsername())
+                .password(encodedPassword)
+                .role(Role.USER)
+                .build();
+
+        userRepository.save(user);
+    }
 
     @Transactional
     public Map<String, String> login(LoginRequest loginRequest) {
