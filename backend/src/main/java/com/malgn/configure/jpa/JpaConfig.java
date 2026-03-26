@@ -1,4 +1,4 @@
-package com.malgn.configure;
+package com.malgn.configure.jpa;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

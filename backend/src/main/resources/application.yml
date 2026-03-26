@@ -46,3 +46,6 @@ logging:
     root: info
     web: info
     com.malgn: debug
+## jwt
+jwt:
+  secret: ${JWT_SECRET:MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTI=}
