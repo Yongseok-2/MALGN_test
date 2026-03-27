@@ -39,7 +39,11 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/h2-console/**", "/api/auth/**").permitAll() // 로그인, H2는 무사통과
+                        .requestMatchers(
+                                "/h2-console/**",
+                                "/api/auth/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**").permitAll() // 로그인, H2는 무사통과
                         .anyRequest().authenticated() // 그 외 모든 요청은 검문(인증) 필수
                 )
 

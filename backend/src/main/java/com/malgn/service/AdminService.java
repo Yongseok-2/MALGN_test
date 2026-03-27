@@ -35,8 +35,12 @@ public class AdminService {
         });
     }
 
-    public Page<ContentResponseDto> findDeletedAll(String keyword, Pageable pageable) {
+    public Page<ContentResponseDto> findDeletedAll(String keyword, Pageable pageable, boolean isAdmin) {
         Page<Content> contentPage;
+
+        if (!isAdmin) {
+            throw new BusinessException(ErrorCode.ACCESS_DENIED);
+        }
 
         if(keyword != null && !keyword.isEmpty()) {
             contentPage = contentRepository.findByTitleContainingAndDeletedTrue(keyword, pageable);
