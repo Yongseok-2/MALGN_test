@@ -2,6 +2,7 @@ package com.malgn.document;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
@@ -23,11 +24,11 @@ public interface UserApiDocumentation {
             }
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "게시글 조회 성공"),
+            @ApiResponse(responseCode = "200", description = "게시글 조회 성공", content = @Content),
+            @ApiResponse(responseCode = "401", description = "[A001] 로그인이 필요한 서비스입니다.", content = @Content),
             @ApiResponse(responseCode = "403", description = "권한 부족 에러:\n" +
-                    "- [A001] 로그인이 필요한 서비스입니다. \n" +
                     "- [A002] 토큰이 만료되었습니다. \n" +
-                    "- [Z001] 접근 권한이 없습니다."),
+                    "- [Z001] 접근 권한이 없습니다.", content = @Content)
     })
     @interface FindMyContentsDoc {
     }

@@ -1,7 +1,10 @@
 package com.malgn.document;
 
+import com.malgn.exception.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
@@ -18,8 +21,8 @@ public interface ContentApiDocumentation {
             description = "제목(title)과 본문(description)을 받아 게시글을 등록합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "게시글 등록 성공"),
-            @ApiResponse(responseCode = "403", description = "로그인이 필요한 서비스입니다."),
+            @ApiResponse(responseCode = "200", description = "게시글 등록 성공", content = @Content),
+            @ApiResponse(responseCode = "401", description = "[A001] 로그인이 필요한 서비스입니다.", content = @Content)
     })
     @interface SaveDoc {
     }
@@ -33,9 +36,12 @@ public interface ContentApiDocumentation {
             }
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "게시글 조회 성공"),
-            @ApiResponse(responseCode = "403", description = "로그인이 필요한 서비스입니다."),
-            @ApiResponse(responseCode = "404", description = "해당 콘텐츠를 찾을 수 없습니다.")
+            @ApiResponse(responseCode = "200", description = "게시글 조회 성공", content = @Content),
+            @ApiResponse(responseCode = "401", description = "[A001] 로그인이 필요한 서비스입니다.", content = @Content),
+            @ApiResponse(responseCode = "403", description = "권한 부족 에러:\n" +
+                    "- [A002] 토큰이 만료되었습니다. \n" +
+                    "- [Z001] 접근 권한이 없습니다.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "해당 콘텐츠를 찾을 수 없습니다.", content = @Content)
     })
     @interface ViewDoc {
     }
@@ -49,12 +55,12 @@ public interface ContentApiDocumentation {
             }
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "게시글 수정 성공"),
+            @ApiResponse(responseCode = "200", description = "게시글 수정 성공", content = @Content),
+            @ApiResponse(responseCode = "401", description = "[A001] 로그인이 필요한 서비스입니다.", content = @Content),
             @ApiResponse(responseCode = "403", description = "권한 부족 에러:\n" +
-                    "- [A001] 로그인이 필요한 서비스입니다. \n" +
                     "- [A002] 토큰이 만료되었습니다. \n" +
-                    "- [Z001] 접근 권한이 없습니다."),
-            @ApiResponse(responseCode = "404", description = "해당 콘텐츠를 찾을 수 없습니다.")
+                    "- [Z001] 접근 권한이 없습니다.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "해당 콘텐츠를 찾을 수 없습니다.", content = @Content)
     })
     @interface UpdateDoc {
     }
@@ -68,12 +74,12 @@ public interface ContentApiDocumentation {
             }
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "게시글 삭제 성공"),
+            @ApiResponse(responseCode = "200", description = "게시글 삭제 성공", content = @Content),
+            @ApiResponse(responseCode = "401", description = "[A001] 로그인이 필요한 서비스입니다.", content = @Content),
             @ApiResponse(responseCode = "403", description = "권한 부족 에러:\n" +
-                    "- [A001] 로그인이 필요한 서비스입니다. \n" +
                     "- [A002] 토큰이 만료되었습니다. \n" +
-                    "- [Z001] 접근 권한이 없습니다."),
-            @ApiResponse(responseCode = "404", description = "해당 콘텐츠를 찾을 수 없습니다.")
+                    "- [Z001] 접근 권한이 없습니다.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "해당 콘텐츠를 찾을 수 없습니다.", content = @Content)
     })
     @interface DeleteDoc {
     }
@@ -90,11 +96,11 @@ public interface ContentApiDocumentation {
             }
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "게시글 삭제 성공"),
+            @ApiResponse(responseCode = "200", description = "게시글 삭제 성공", content = @Content),
+            @ApiResponse(responseCode = "401", description = "[A001] 로그인이 필요한 서비스입니다.", content = @Content),
             @ApiResponse(responseCode = "403", description = "권한 부족 에러:\n" +
-                    "- [A001] 로그인이 필요한 서비스입니다. \n" +
                     "- [A002] 토큰이 만료되었습니다. \n" +
-                    "- [Z001] 접근 권한이 없습니다.")
+                    "- [Z001] 접근 권한이 없습니다.", content = @Content)
     })
     @interface FindAllDoc {
     }
