@@ -64,8 +64,15 @@ public class ContentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ContentResponseDto> findAll(Pageable pageable) {
-        Page<Content> contentPage = contentRepository.findAll(pageable);
+    public Page<ContentResponseDto> findAll(String keyword, Pageable pageable) {
+        Page<Content> contentPage;
+
+        if(keyword != null && !keyword.isEmpty()) {
+            contentPage = contentRepository.findByTitleContaining(keyword, pageable);
+        }else {
+            contentPage = contentRepository.findAll(pageable);
+        }
+
         return contentPage.map(content -> new ContentResponseDto(content, null));
     }
 }

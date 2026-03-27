@@ -51,8 +51,9 @@ public class ContentController {
 
     @GetMapping
     public ResponseEntity<Page<ContentResponseDto>> findAll(
+            @RequestParam(required = false) String keyword,
             @PageableDefault(size = 10, sort="id", direction = Sort.Direction.DESC) Pageable pageable) {
-                return ResponseEntity.ok(contentService.findAll(pageable));
+                return ResponseEntity.ok(contentService.findAll(keyword, pageable));
     }
 
     //관리자 권한 확인
