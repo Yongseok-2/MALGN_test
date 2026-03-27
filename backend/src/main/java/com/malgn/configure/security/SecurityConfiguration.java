@@ -47,7 +47,7 @@ public class SecurityConfiguration {
                         UsernamePasswordAuthenticationFilter.class)
 
                 .exceptionHandling(exception -> exception
-                                .authenticationEntryPoint(authenticationEntryPoint) // 401 처리
+                                .authenticationEntryPoint(authenticationEntryPoint)
                                 .accessDeniedHandler(accessDeniedHandler)
                 );
 

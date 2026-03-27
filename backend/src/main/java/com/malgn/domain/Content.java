@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -35,7 +36,7 @@ public class Content {
     @Column(updatable = false)
     private LocalDateTime createdDate;
 
-    @CreatedDate
+    @CreatedBy
     @Column(updatable = false, length = 50)
     private String createdBy;
 

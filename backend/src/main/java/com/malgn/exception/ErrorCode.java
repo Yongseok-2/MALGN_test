@@ -22,9 +22,10 @@ public enum ErrorCode {
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "A004", "로그인 정보가 일치하지 않습니다."),
 
     // Authorization
-    ACCESS_DENIED(HttpStatus.FORBIDDEN, "Z001", "접근 권한이 없습니다.");
+    ACCESS_DENIED(HttpStatus.FORBIDDEN, "Z001", "접근 권한이 없습니다."),
 
     // Contents
+    CONTENT_NOT_FOUND(HttpStatus.NOT_FOUND, "CT001", "해당 콘텐츠를 찾을 수 없습니다");
 
     private final HttpStatus status;
     private final String code;
