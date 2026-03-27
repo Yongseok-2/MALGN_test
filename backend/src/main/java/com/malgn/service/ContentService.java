@@ -1,6 +1,7 @@
 package com.malgn.service;
 
 import com.malgn.domain.Content;
+import com.malgn.dto.CommentResponseDto;
 import com.malgn.dto.ContentRequestDto;
 import com.malgn.dto.ContentResponseDto;
 import com.malgn.exception.BusinessException;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ContentService {
 
     private final ContentRepository contentRepository;
+    private final CommentService commentService;
 
     @Transactional
     public Long save(ContentRequestDto requestDto, String username) {
@@ -30,13 +32,14 @@ public class ContentService {
     }
 
     @Transactional
-    public ContentResponseDto findById(Long id, String currentUsername) {
+    public ContentResponseDto findById(Long id, Pageable pageable, String currentUsername) {
         Content content = contentRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CONTENT_NOT_FOUND));
 
+        Page<CommentResponseDto> comments = commentService.findAll(id, pageable, currentUsername);
         content.incrementViewCount();
 
-        return new ContentResponseDto(content, currentUsername);
+        return new ContentResponseDto(content, comments, currentUsername);
     }
 
     @Transactional
@@ -73,6 +76,6 @@ public class ContentService {
             contentPage = contentRepository.findAllByDeletedFalse(pageable);
         }
 
-        return contentPage.map(content -> new ContentResponseDto(content, null));
+        return contentPage.map(content -> new ContentResponseDto(content, null, null));
     }
 }

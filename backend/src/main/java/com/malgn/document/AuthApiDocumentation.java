@@ -19,7 +19,7 @@ public interface AuthApiDocumentation {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "회원가입을 성공했습니다.", content = @Content),
-            @ApiResponse(responseCode = "400", description = "이미 존재하는 아이디입니다.", content = @Content)
+            @ApiResponse(responseCode = "400", description = "[U001]이미 존재하는 아이디입니다.", content = @Content)
     })
     @interface SignUpDoc {
     }
@@ -32,7 +32,7 @@ public interface AuthApiDocumentation {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그인을 성공했습니다. (쿠키 발급)", content = @Content),
-            @ApiResponse(responseCode = "403", description = "로그인 정보가 일치하지 않습니다.", content = @Content)
+            @ApiResponse(responseCode = "403", description = "[A004]로그인 정보가 일치하지 않습니다.", content = @Content)
     })
     @interface LoginDoc {
     }

@@ -12,6 +12,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "contents")
@@ -51,6 +53,9 @@ public class Content {
     @Column(nullable = false)
     private boolean deleted = false;
 
+    @OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
     @Builder
     public Content(String title, String description, String createdBy) {
         this.title = title;
@@ -76,5 +81,9 @@ public class Content {
     // 삭제 되돌리기
     public void restore() {
         this.deleted = false;
+    }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
     }
 }

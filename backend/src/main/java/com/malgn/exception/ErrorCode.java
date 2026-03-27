@@ -24,8 +24,11 @@ public enum ErrorCode {
     // Authorization
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "Z001", "접근 권한이 없습니다."),
 
-    // Contents
-    CONTENT_NOT_FOUND(HttpStatus.NOT_FOUND, "CT001", "해당 콘텐츠를 찾을 수 없습니다.");
+    // Content
+    CONTENT_NOT_FOUND(HttpStatus.NOT_FOUND, "CT001", "해당 콘텐츠를 찾을 수 없습니다."),
+
+    // Comment
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "CM001", "해당 댓글을 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String code;

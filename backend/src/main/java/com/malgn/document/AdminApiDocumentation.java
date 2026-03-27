@@ -28,7 +28,7 @@ public interface AdminApiDocumentation {
             @ApiResponse(responseCode = "403", description = "권한 부족 에러:\n" +
                     "- [A002] 토큰이 만료되었습니다. \n" +
                     "- [Z001] 접근 권한이 없습니다.", content = @Content),
-            @ApiResponse(responseCode = "404", description = "복구하려는 게시글을 찾을 수 없습니다.", content = @Content)
+            @ApiResponse(responseCode = "404", description = "[CT001]해당 콘텐츠를 찾을 수 없습니다.", content = @Content)
     })
     @interface RestoreContentsDoc {
     }

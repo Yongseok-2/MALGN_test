@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Content API", description = "게시글 작성, 조회, 수정, 삭제(Soft Delete) 기능을 제공합니다.")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/contents")
+@RequestMapping("/api/content")
 public class ContentController {
 
     private final ContentService contentService;
@@ -40,8 +40,9 @@ public class ContentController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ContentResponseDto> view(
              @PathVariable Long id,
+             @PageableDefault(size = 10, sort="id", direction = Sort.Direction.DESC) Pageable pageable,
              @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(contentService.findById(id, userDetails.getUsername()));
+        return ResponseEntity.ok(contentService.findById(id, pageable, userDetails.getUsername()));
     }
 
     @ContentApiDocumentation.UpdateDoc

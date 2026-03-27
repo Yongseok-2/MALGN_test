@@ -16,3 +16,14 @@ CREATE TABLE contents (
                           last_modified_by VARCHAR(50),
                           deleted BOOLEAN NOT NULL DEFAULT FALSE
 );
+
+CREATE TABLE comments (
+                         id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                         text VARCHAR(500) NOT NULL,
+                         created_date TIMESTAMP,
+                         created_by VARCHAR(50) NOT NULL,
+                         last_modified_date TIMESTAMP,
+                         content_id BIGINT NOT NULL,
+                         deleted BOOLEAN NOT NULL DEFAULT FALSE,
+                         CONSTRAINT fk_comment_content FOREIGN KEY (content_id) REFERENCES contents (id)
+);
