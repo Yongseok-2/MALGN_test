@@ -1,4 +1,4 @@
-package com.malgn.service.ContentService;
+package com.malgn.service;
 
 import com.malgn.domain.Content;
 import com.malgn.dto.ContentRequestDto;

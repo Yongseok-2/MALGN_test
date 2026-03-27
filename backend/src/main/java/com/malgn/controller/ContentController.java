@@ -2,7 +2,7 @@ package com.malgn.controller;
 
 import com.malgn.dto.ContentRequestDto;
 import com.malgn.dto.ContentResponseDto;
-import com.malgn.service.ContentService.ContentService;
+import com.malgn.service.ContentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
