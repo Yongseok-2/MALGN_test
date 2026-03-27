@@ -31,7 +31,7 @@ public class ContentService {
 
     @Transactional
     public ContentResponseDto findById(Long id, String currentUsername) {
-        Content content = contentRepository.findById(id)
+        Content content = contentRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CONTENT_NOT_FOUND));
 
         content.incrementViewCount();
@@ -41,7 +41,7 @@ public class ContentService {
 
     @Transactional
     public void update(Long id, ContentRequestDto requestDto, String username, boolean isAdmin) {
-        Content content = contentRepository.findById(id)
+        Content content = contentRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CONTENT_NOT_FOUND));
 
         if (!isAdmin && !content.getCreatedBy().equals(username)) {
@@ -53,14 +53,14 @@ public class ContentService {
 
     @Transactional
     public void delete(Long id, String username, boolean isAdmin) {
-        Content content = contentRepository.findById(id)
+        Content content = contentRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CONTENT_NOT_FOUND));
 
         if (!isAdmin && !content.getCreatedBy().equals(username)) {
             throw new BusinessException(ErrorCode.ACCESS_DENIED);
         }
 
-        contentRepository.delete(content);
+        content.delete();
     }
 
     @Transactional(readOnly = true)
@@ -68,9 +68,9 @@ public class ContentService {
         Page<Content> contentPage;
 
         if(keyword != null && !keyword.isEmpty()) {
-            contentPage = contentRepository.findByTitleContaining(keyword, pageable);
+            contentPage = contentRepository.findByTitleContainingAndDeletedFalse(keyword, pageable);
         }else {
-            contentPage = contentRepository.findAll(pageable);
+            contentPage = contentRepository.findAllByDeletedFalse(pageable);
         }
 
         return contentPage.map(content -> new ContentResponseDto(content, null));

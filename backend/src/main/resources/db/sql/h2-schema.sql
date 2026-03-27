@@ -13,5 +13,6 @@ CREATE TABLE contents (
                           created_date TIMESTAMP,
                           created_by VARCHAR(50) NOT NULL,
                           last_modified_date TIMESTAMP,
-                          last_modified_by VARCHAR(50)
+                          last_modified_by VARCHAR(50),
+                          deleted BOOLEAN NOT NULL DEFAULT FALSE
 );

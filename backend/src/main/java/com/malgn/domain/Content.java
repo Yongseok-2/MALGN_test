@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -47,6 +48,9 @@ public class Content {
     @Column(length = 50)
     private String lastModifiedBy;
 
+    @Column(nullable = false)
+    private boolean deleted = false;
+
     @Builder
     public Content(String title, String description, String createdBy) {
         this.title = title;
@@ -62,5 +66,15 @@ public class Content {
 
     public void incrementViewCount() {
         this.viewCount++;
+    }
+
+    // 삭제
+    public void delete() {
+        this.deleted = true;
+    }
+
+    // 삭제 되돌리기
+    public void restore() {
+        this.deleted = false;
     }
 }
