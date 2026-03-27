@@ -7,6 +7,8 @@ import com.malgn.exception.BusinessException;
 import com.malgn.exception.ErrorCode;
 import com.malgn.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,5 +61,11 @@ public class ContentService {
         }
 
         contentRepository.delete(content);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ContentResponseDto> findAll(Pageable pageable) {
+        Page<Content> contentPage = contentRepository.findAll(pageable);
+        return contentPage.map(content -> new ContentResponseDto(content, null));
     }
 }
