@@ -22,4 +22,6 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
 
     // 삭제된 것만 조회(관리자 페이지)
     Page<Content> findAllByDeletedTrue(Pageable pageable);
+
+    Page<Content> findByCreatedByAndDeletedFalse(String username, Pageable pageable);
 }

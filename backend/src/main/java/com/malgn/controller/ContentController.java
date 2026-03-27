@@ -35,7 +35,10 @@ public class ContentController {
 
     @PutMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody ContentRequestDto requestDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Void> update(
+            @PathVariable Long id,
+            @RequestBody ContentRequestDto requestDto,
+            @AuthenticationPrincipal UserDetails userDetails) {
 
         contentService.update(id, requestDto, userDetails.getUsername(), checkAdmin(userDetails));
         return ResponseEntity.ok().build();
