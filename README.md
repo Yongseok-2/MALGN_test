@@ -1,18 +1,16 @@
 # 맑은기술 백엔드 개발자 코딩과제
 
----
-
 ## 1. 프로젝트 실행 방법
 
 ### QueryDSL QClass 생성 및 빌드
 * IDE에서 Gradle 빌드 동기화를 수행합니다.
 * 터미널 또는 Gradle 탭에서 아래 명령어를 실행하여 QClass를 생성합니다.
-  - ./gradlew clean compileJava
-* build/generated/sources/annotationProcessor/java/main 경로에 QClass 생성을 확인하고 필요 시 'Generated Sources Root'로 설정합니다.
+`./gradlew clean compileJava`
+* `build/generated/sources/annotationProcessor/java/main` 경로에 QClass 생성을 확인하고 필요 시 'Generated Sources Root'로 설정합니다.
 
 ### 애플리케이션 구동
 * MalgnApplication.java를 실행하거나 아래 명령어를 입력합니다.
-  - ./gradlew bootRun
+`./gradlew bootRun`
 * 인메모리 DB(H2)를 사용하므로 별도의 데이터베이스 설치 없이 즉시 실행 및 테스트가 가능합니다.
 
 ---
@@ -53,7 +51,7 @@ erDiagram
         bigint content_id FK "게시글 ID"
         boolean deleted "논리 삭제 여부"
     }
-
+```
 ## 3. 구현 내용
 
 ### 기본 기능 (Core)
