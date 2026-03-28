@@ -3,6 +3,7 @@ package com.malgn.controller;
 import com.malgn.document.ContentApiDocumentation;
 import com.malgn.dto.ContentRequestDto;
 import com.malgn.dto.ContentResponseDto;
+import com.malgn.dto.ContentSearchQuery;
 import com.malgn.service.ContentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -70,10 +71,11 @@ public class ContentController {
 
     @ContentApiDocumentation.FindAllDoc
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Page<ContentResponseDto>> findAll(
-            @RequestParam(required = false) String keyword,
+            @ModelAttribute ContentSearchQuery searchQuery,
             @PageableDefault(size = 10, sort="id", direction = Sort.Direction.DESC) Pageable pageable) {
-                return ResponseEntity.ok(contentService.findAll(keyword, pageable));
+                return ResponseEntity.ok(contentService.findAll(searchQuery, pageable));
     }
 
     //관리자 권한 확인

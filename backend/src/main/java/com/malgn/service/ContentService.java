@@ -4,6 +4,7 @@ import com.malgn.domain.Content;
 import com.malgn.dto.CommentResponseDto;
 import com.malgn.dto.ContentRequestDto;
 import com.malgn.dto.ContentResponseDto;
+import com.malgn.dto.ContentSearchQuery;
 import com.malgn.exception.BusinessException;
 import com.malgn.exception.ErrorCode;
 import com.malgn.repository.ContentRepository;
@@ -67,14 +68,9 @@ public class ContentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ContentResponseDto> findAll(String keyword, Pageable pageable) {
-        Page<Content> contentPage;
+    public Page<ContentResponseDto> findAll(ContentSearchQuery searchQuery, Pageable pageable) {
 
-        if(keyword != null && !keyword.isEmpty()) {
-            contentPage = contentRepository.findByTitleContainingAndDeletedFalse(keyword, pageable);
-        }else {
-            contentPage = contentRepository.findAllByDeletedFalse(pageable);
-        }
+        Page<Content> contentPage = contentRepository.search(searchQuery, pageable);
 
         return contentPage.map(content -> new ContentResponseDto(content, null, null));
     }
