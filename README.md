@@ -5,7 +5,7 @@
 ### QueryDSL QClass 생성 및 빌드
 * IDE에서 Gradle 빌드 동기화를 수행합니다.
 * 터미널 또는 Gradle 탭에서 아래 명령어를 실행하여 QClass를 생성합니다.
-`./gradlew clean compileJava`
+* `./gradlew clean compileJava`
 * `build/generated/sources/annotationProcessor/java/main` 경로에 QClass 생성을 확인하고 필요 시 'Generated Sources Root'로 설정합니다.
 
 ### 애플리케이션 구동
