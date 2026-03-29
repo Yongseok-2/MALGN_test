@@ -3,6 +3,8 @@ package com.malgn.document;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
@@ -18,9 +20,15 @@ public interface AdminApiDocumentation {
     @Operation(
             summary = "삭제된 게시글 되돌리기",
             description = "되돌릴 게시글의 id(하나 또는 여러개)를 받아 삭제를 취소합니다",
-            parameters = {
-                    @Parameter(name = "ids", description = "되돌릴 게시글 id", example = "[1, 2]")
-            }
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "되돌릴 게시글 ID 목록",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(type = "array", implementation = Long.class),
+                            examples = @ExampleObject(value = "[1, 2, 3]") // UI에 미리 채워질 예시
+                    )
+            )
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "게시글 복구 성공", content = @Content),

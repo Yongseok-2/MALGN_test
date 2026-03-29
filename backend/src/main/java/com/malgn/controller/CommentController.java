@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Comment API", description = "댓글 작성, 조회, 수정, 삭제(Soft Delete) 기능을 제공합니다.")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/content/{contentId}/comments")
+@RequestMapping("/api/")
 public class CommentController {
 
     private final CommentService commentService;
 
         @CommentApiDocumentation.SaveDoc
-        @PostMapping
+        @PostMapping("/content/{contentId}/comments")
         @PreAuthorize("isAuthenticated()")
         public ResponseEntity<Long> save(
                 @PathVariable Long contentId,
@@ -33,7 +33,7 @@ public class CommentController {
     }
 
     @CommentApiDocumentation.UpdateDoc
-    @PatchMapping("/{commentId}")
+    @PatchMapping("/comments/{commentId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> update(
             @PathVariable Long commentId,
@@ -44,7 +44,7 @@ public class CommentController {
     }
 
     @CommentApiDocumentation.DeleteDoc
-    @DeleteMapping("/{commentId}")
+    @DeleteMapping("/comments/{commentId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> delete(
             @PathVariable Long commentId,

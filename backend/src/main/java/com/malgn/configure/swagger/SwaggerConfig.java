@@ -16,8 +16,8 @@ public class SwaggerConfig {
     public OpenAPI openAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Malgn Content API")
-                        .description("게시판 사전과제 API 명세서입니다.")
+                        .title("MALGN CMS REST API")
+                        .description("사전과제 API 명세서입니다.")
                         .version("v1.0.0"));
     }
 }
