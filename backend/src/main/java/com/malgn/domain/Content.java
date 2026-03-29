@@ -56,6 +56,9 @@ public class Content {
     @OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Attachment> attachments = new ArrayList<>();
+
     @Builder
     public Content(String title, String description, String createdBy) {
         this.title = title;
@@ -85,5 +88,12 @@ public class Content {
 
     public void addComment(Comment comment) {
         this.comments.add(comment);
+    }
+
+    public void addAttachment(Attachment attachment) {
+        this.attachments.add(attachment);
+        if (attachment.getContent() != this) {
+            attachment.setContent(this);
+        }
     }
 }

@@ -1,10 +1,9 @@
 package com.malgn.controller;
 
 import com.malgn.document.AuthApiDocumentation;
-import com.malgn.dto.LoginRequest;
-import com.malgn.dto.SignUpRequest;
+import com.malgn.dto.LoginRequestDto;
+import com.malgn.dto.SignUpRequestDto;
 import com.malgn.service.AuthService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,7 +26,7 @@ public class AuthController {
 
     @AuthApiDocumentation.SignUpDoc
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody SignUpRequest request) {
+    public ResponseEntity<String> signup(@RequestBody SignUpRequestDto request) {
         authService.signUp(request);
         return ResponseEntity.status(HttpStatus.CREATED).body("회원가입 성공");
     }
@@ -35,7 +34,7 @@ public class AuthController {
     @AuthApiDocumentation.LoginDoc
     @PostMapping("/login")
     public ResponseEntity<String> login(
-            @RequestBody LoginRequest request,
+            @RequestBody LoginRequestDto request,
             @Parameter(hidden = true) HttpServletResponse response) {
         Map<String, String> tokens = authService.login(request);
 

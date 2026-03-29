@@ -2,7 +2,7 @@ package com.malgn.repository;
 
 import com.malgn.domain.Content;
 import com.malgn.domain.QContent;
-import com.malgn.dto.ContentSearchQuery;
+import com.malgn.dto.ContentSearchQueryDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -22,48 +22,45 @@ public class ContentRepositoryImpl implements ContentRepositoryCustom {
     private final JPAQueryFactory jpaqueryFactory;
 
     @Override
-    public Page<Content> search(ContentSearchQuery searchQuery, Pageable pageable) {
+    public Page<Content> search(ContentSearchQueryDto searchQuery, Pageable pageable) {
 
         QContent qContent = QContent.content;
 
-        // 실제 데이터를 가져옴 (페이징 적용)
         List<Content> contents = jpaqueryFactory
                 .selectFrom(qContent)
                 .where(
-                        titleContains(searchQuery.getTitle(), qContent),
-                        textContains(searchQuery.getDescription(), qContent),
-                        createdByEq(searchQuery.getCreatedBy(), qContent),
-                        qContent.deleted.eq(false)
+                        searchCondition(searchQuery, qContent),
+                        qContent.deleted.isFalse()
                 )
                 .orderBy(qContent.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        // 전체 데이터 개수
         JPAQuery<Long> countQuery = jpaqueryFactory
                 .select(qContent.count())
                 .from(qContent)
                 .where(
-                        titleContains(searchQuery.getTitle(), qContent),
-                        textContains(searchQuery.getDescription(), qContent),
-                        createdByEq(searchQuery.getCreatedBy(), qContent),
-                        qContent.deleted.eq(false)
+                        searchCondition(searchQuery, qContent),
+                        qContent.deleted.isFalse()
                 );
-        // Page객체로 변환
+
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
     }
 
-    private BooleanExpression titleContains(String title, QContent qContent) {
-        return StringUtils.hasText(title) ? qContent.title.contains(title) : null;
-    }
+    private BooleanExpression searchCondition(ContentSearchQueryDto searchQuery, QContent qContent) {
+        String keyword = searchQuery.getKeyword();
+        ContentSearchQueryDto.SearchType type = searchQuery.getType();
 
-    private BooleanExpression textContains(String description, QContent qContent) {
-        return StringUtils.hasText(description) ? qContent.description.contains(description) : null;
-    }
+        if (!StringUtils.hasText(keyword) || type == null) {
+            return null;
+        }
 
-    private BooleanExpression createdByEq(String createdBy, QContent qContent) {
-        return StringUtils.hasText(createdBy) ? qContent.createdBy.eq(createdBy) : null;
+        return switch (type) {
+            case TITLE -> qContent.title.contains(keyword);
+            case DESCRIPTION -> qContent.description.contains(keyword);
+            case CREATED_BY -> qContent.createdBy.eq(keyword);
+        };
     }
 
 }

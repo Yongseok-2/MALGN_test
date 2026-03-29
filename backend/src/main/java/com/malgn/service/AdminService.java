@@ -48,6 +48,6 @@ public class AdminService {
             contentPage = contentRepository.findAllByDeletedTrue(pageable);
         }
 
-        return contentPage.map(content -> new ContentResponseDto(content, null, null));
+        return contentPage.map(content -> new ContentResponseDto(content, null, null, null));
     }
 }

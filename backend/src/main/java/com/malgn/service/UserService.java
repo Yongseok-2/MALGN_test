@@ -19,7 +19,7 @@ public class UserService {
     public Page<ContentResponseDto> findMyContents(String username, Pageable pageable) {
         Page<Content> contentPage = contentRepository.findByCreatedByAndDeletedFalse(username, pageable);
 
-        return contentPage.map(content -> new ContentResponseDto(content, null, username));
+        return contentPage.map(content -> new ContentResponseDto(content, null, null, username));
 
     }
 }

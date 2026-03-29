@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Schema(description = "게시글 응답 정보")
@@ -85,7 +86,10 @@ public class ContentResponseDto {
                     "}")
     Page<CommentResponseDto> comments;
 
-    public ContentResponseDto(Content content, Page<CommentResponseDto> comments, String currentUsername) {
+    @Schema(description = "게시글에 첨부된 파일 리스트")
+    private List<AttachmentResponseDto> attachments;
+
+    public ContentResponseDto(Content content, Page<CommentResponseDto> comments, List<AttachmentResponseDto> attachments, String currentUsername) {
         this.id = content.getId();
         this.title = content.getTitle();
         this.description = content.getDescription();
@@ -93,7 +97,9 @@ public class ContentResponseDto {
         this.createdBy = content.getCreatedBy();
         this.createdDate = content.getCreatedDate();
         this.lastModifiedDate = content.getLastModifiedDate();
-        this.isAuthor = content.getCreatedBy().equals(currentUsername);
         this.comments = comments;
+        this.attachments = attachments;
+        this.isAuthor = content.getCreatedBy().equals(currentUsername);
+
     }
 }

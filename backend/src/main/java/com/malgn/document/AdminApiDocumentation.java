@@ -43,7 +43,7 @@ public interface AdminApiDocumentation {
                     @Parameter(name = "keyword", description = "검색할 단어", example = "테스트", required = false),
                     @Parameter(name = "page", description = "페이지 번호 (0부터 시작)", example = "0"),
                     @Parameter(name = "size", description = "한 페이지당 게시글 수", example = "10"),
-                    @Parameter(name = "sort", description = "정렬 기준 (필드명,ASC|DESC)", example = "id,DESC")
+                    @Parameter(name = "sort", description = "정렬 기준 (필드명, ASC|DESC), [예시: id,DESC]", example = "id,DESC")
             }
     )
     @ApiResponses(value = {

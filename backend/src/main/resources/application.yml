@@ -50,10 +50,14 @@ logging:
 jwt:
   secret: ${JWT_SECRET:MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTI=}
 
-#Swagger
+## Swagger
 springdoc:
   api-docs:
     enabled: true
   # Querydsl 관련 설정 제외
   default-flat-param-object: true
   model-and-view-allowed: true
+
+## upload
+file:
+  dir: ${user.dir}/src/main/resources/uploads/

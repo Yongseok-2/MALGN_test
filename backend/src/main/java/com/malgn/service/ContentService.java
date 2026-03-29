@@ -1,18 +1,22 @@
 package com.malgn.service;
 
+import com.malgn.domain.Attachment;
 import com.malgn.domain.Content;
-import com.malgn.dto.CommentResponseDto;
-import com.malgn.dto.ContentRequestDto;
-import com.malgn.dto.ContentResponseDto;
-import com.malgn.dto.ContentSearchQuery;
+import com.malgn.dto.*;
 import com.malgn.exception.BusinessException;
 import com.malgn.exception.ErrorCode;
+import com.malgn.repository.AttachmentRepository;
 import com.malgn.repository.ContentRepository;
+import com.malgn.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,15 +24,27 @@ import org.springframework.transaction.annotation.Transactional;
 public class ContentService {
 
     private final ContentRepository contentRepository;
+    private final AttachmentRepository attachmentRepository;
     private final CommentService commentService;
+    private final FileUtil fileUtil;
+    private final AttachmentService attachmentService;
 
     @Transactional
-    public Long save(ContentRequestDto requestDto, String username) {
+    public Long save(ContentRequestDto requestDto, String username, List<MultipartFile> files) throws IOException{
         Content content = Content.builder()
                 .title(requestDto.getTitle())
                 .description(requestDto.getDescription())
                 .createdBy(username)
                 .build();
+
+        if (files != null && !files.isEmpty()) {
+            for (MultipartFile file : files) {
+                Attachment attachment = fileUtil.storeFile(file);
+                if (attachment != null) {
+                    content.addAttachment(attachment);
+                }
+            }
+        }
         return contentRepository.save(content).getId();
     }
 
@@ -38,9 +54,11 @@ public class ContentService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.CONTENT_NOT_FOUND));
 
         Page<CommentResponseDto> comments = commentService.findAll(id, pageable, currentUsername);
+
+        List<AttachmentResponseDto> attachments = attachmentService.findByContentId(content.getId());
         content.incrementViewCount();
 
-        return new ContentResponseDto(content, comments, currentUsername);
+        return new ContentResponseDto(content, comments, attachments, currentUsername);
     }
 
     @Transactional
@@ -68,10 +86,10 @@ public class ContentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ContentResponseDto> findAll(ContentSearchQuery searchQuery, Pageable pageable) {
+    public Page<ContentResponseDto> findAll(ContentSearchQueryDto searchQuery, Pageable pageable) {
 
         Page<Content> contentPage = contentRepository.search(searchQuery, pageable);
 
-        return contentPage.map(content -> new ContentResponseDto(content, null, null));
+        return contentPage.map(content -> new ContentResponseDto(content, null, null, null));
     }
 }

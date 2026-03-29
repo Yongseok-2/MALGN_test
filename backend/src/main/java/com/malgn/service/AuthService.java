@@ -1,19 +1,14 @@
 package com.malgn.service;
 
 import com.malgn.configure.jwt.JwtTokenProvider;
-import com.malgn.domain.Content;
 import com.malgn.domain.Role;
 import com.malgn.domain.User;
-import com.malgn.dto.ContentResponseDto;
-import com.malgn.dto.LoginRequest;
-import com.malgn.dto.SignUpRequest;
+import com.malgn.dto.LoginRequestDto;
+import com.malgn.dto.SignUpRequestDto;
 import com.malgn.exception.BusinessException;
 import com.malgn.exception.ErrorCode;
-import com.malgn.repository.ContentRepository;
 import com.malgn.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +24,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public void signUp(SignUpRequest request) {
+    public void signUp(SignUpRequestDto request) {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new BusinessException(ErrorCode.DUPLICATE_USER);
         }
@@ -46,7 +41,7 @@ public class AuthService {
     }
 
     @Transactional
-    public Map<String, String> login(LoginRequest loginRequest) {
+    public Map<String, String> login(LoginRequestDto loginRequest) {
         User user = userRepository.findByUsername(loginRequest.getUsername())
                 .orElseThrow(() -> new BusinessException(ErrorCode.LOGIN_FAILED));
 

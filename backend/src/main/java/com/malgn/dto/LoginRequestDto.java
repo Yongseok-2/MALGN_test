@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Schema(description = "로그인 요청 정보")
-public class LoginRequest {
+public class LoginRequestDto {
 
     @Schema(description = "아이디", example = "user1")
     private String username;
