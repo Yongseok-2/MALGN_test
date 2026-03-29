@@ -48,4 +48,17 @@ public interface AuthApiDocumentation {
     })
     @interface LogoutDoc {
     }
+
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @Operation(
+            summary = "내 정보 반환",
+            description = "내 이름과 권환을 반환합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그아웃을 성공했습니다. (쿠키 삭제)", content = @Content),
+            @ApiResponse(responseCode = "403", description = "[A004]로그인 정보가 일치하지 않습니다.", content = @Content)
+    })
+    @interface GetMyInfoDoc {
+    }
 }

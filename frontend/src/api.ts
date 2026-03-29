@@ -33,6 +33,10 @@ export async function logout() {
   return (await api.post('/api/auth/logout')).data
 }
 
+export async function getCurrentUser() {
+  return (await api.get('/api/auth/me')).data
+}
+
 export async function listContents(query: ContentQuery) {
   return (await api.get('/api/content', { params: toParams(query) })).data
 }

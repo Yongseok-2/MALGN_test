@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
-import { login, logout, signup } from './api'
+import { normalizeRole } from './auth'
+import { getCurrentUser, login, logout, signup } from './api'
 import type { Session } from './types'
 import { dateText, errorText, text, toRecord } from './utils'
 
@@ -22,18 +23,14 @@ export function AuthPanel({ session, setSession, onLoginDone, onLogoutDone, onNo
     event.preventDefault()
     setLoading(true)
     try {
-      const data =
-        mode === 'signup'
-          ? await (async () => {
-              await signup({ username, password })
-              return login({ username, password })
-            })()
-          : await login({ username, password })
-
-      const record = toRecord(await data)
+      if (mode === 'signup') {
+        await signup({ username, password })
+      }
+      await login({ username, password })
+      const record = toRecord(await getCurrentUser())
       setSession({
         username: text(record.username) || text(record.userName) || text(record.name) || username,
-        role: text(record.role) || session?.role,
+        role: normalizeRole(text(record.role)) || normalizeRole(session?.role) || 'USER',
         loggedInAt: new Date().toISOString(),
       })
       setPassword('')

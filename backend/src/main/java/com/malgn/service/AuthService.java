@@ -5,10 +5,15 @@ import com.malgn.domain.Role;
 import com.malgn.domain.User;
 import com.malgn.dto.LoginRequestDto;
 import com.malgn.dto.SignUpRequestDto;
+import com.malgn.dto.UserInfoResponseDto;
 import com.malgn.exception.BusinessException;
 import com.malgn.exception.ErrorCode;
 import com.malgn.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,5 +58,20 @@ public class AuthService {
         String refreshToken = jwtTokenProvider.createRefreshToken(user.getUsername(), user.getRole().name());
 
         return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
+    }
+
+    public UserInfoResponseDto getMyInfo(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
+            throw new BusinessException(ErrorCode.LOGIN_FAILED);
+        }
+
+        String username = authentication.getName();
+
+        String role = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .findFirst()
+                .orElse("ROLE_USER");
+
+        return new UserInfoResponseDto(username, role);
     }
 }

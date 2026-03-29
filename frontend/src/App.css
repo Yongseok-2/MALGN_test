@@ -534,6 +534,26 @@ textarea {
   gap: 8px;
 }
 
+.deleted-row-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 92px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.deleted-row-check input {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border-radius: 6px;
+}
+
+.deleted .list-row-main {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
 .content-card.deleted {
   border-color: rgba(239, 122, 122, 0.24);
 }
@@ -830,8 +850,16 @@ textarea {
     display: grid;
   }
 
+  .deleted .list-row-main {
+    grid-template-columns: 1fr;
+  }
+
   .list-row-right {
     justify-items: start;
+  }
+
+  .deleted-row-check {
+    min-width: 0;
   }
 
   .footer-bar {

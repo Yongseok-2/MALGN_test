@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { normalizeRole } from './auth'
 import { createComment, deleteComment, deleteContent, getContent, updateComment } from './api'
 import type { CommentItem, ContentDetail, Session } from './types'
 import { bytesText, dateText, errorText, normalizeDetail } from './utils'
@@ -13,7 +14,7 @@ type Props = {
 
 function canEdit(session: Session | null, owner?: string) {
   if (!session || !owner) return false
-  return session.role === 'ADMIN' || session.username === owner
+  return normalizeRole(session.role) === 'ADMIN' || session.username === owner
 }
 
 function handleDownload(storeFileName?: string) {

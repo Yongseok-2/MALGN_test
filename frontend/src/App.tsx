@@ -7,13 +7,16 @@ import {
   Routes,
   useNavigate,
 } from 'react-router-dom'
+import axios from 'axios'
 import { AuthPanel } from './AuthPanel'
 import { DeletedPage } from './DeletedPage'
 import { DetailPage } from './DetailPage'
 import { EditorPage } from './EditorPage'
 import { ListPage } from './ListPage'
-import { listContents, listMyContents, logout } from './api'
+import { normalizeRole } from './auth'
+import { getCurrentUser, listContents, listMyContents, logout } from './api'
 import type { Session } from './types'
+import { text, toRecord } from './utils'
 import './App.css'
 
 const STORAGE_KEY = 'malgn.session'
@@ -65,12 +68,13 @@ function AppShell({
   setNotice: (value: string) => void
 }) {
   const navigate = useNavigate()
+  const isAdmin = normalizeRole(session.role) === 'ADMIN'
 
   const nav = [
     ['/', '전체 게시판'],
     ['/new', '글 작성'],
     ['/me', '내 글'],
-  ].concat(session.role === 'ADMIN' ? [['/admin', '관리자']] : [])
+  ].concat(isAdmin ? [['/admin', '관리자']] : [])
 
   const handleLogout = async () => {
     try {
@@ -199,6 +203,32 @@ function LoginGate({
 function AppContentWithAutoClear() {
   const { session, setSession } = useSession()
   const [notice, setNotice] = useState('')
+
+  useEffect(() => {
+    let active = true
+
+    ;(async () => {
+      try {
+        const record = toRecord(await getCurrentUser())
+        if (!active) return
+        const username = text(record.username) || text(record.userName) || text(record.name)
+        if (!username) return
+        setSession({
+          username,
+          role: normalizeRole(text(record.role)) || 'USER',
+          loggedInAt: new Date().toISOString(),
+        })
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
+          setSession(null)
+        }
+      }
+    })()
+
+    return () => {
+      active = false
+    }
+  }, [setSession])
 
   return (
     <>

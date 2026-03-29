@@ -3,6 +3,7 @@ package com.malgn.controller;
 import com.malgn.document.AuthApiDocumentation;
 import com.malgn.dto.LoginRequestDto;
 import com.malgn.dto.SignUpRequestDto;
+import com.malgn.dto.UserInfoResponseDto;
 import com.malgn.service.AuthService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +13,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -78,5 +81,11 @@ public class AuthController {
         response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
         return ResponseEntity.ok("로그아웃 되었습니다.");
+    }
+
+    @AuthApiDocumentation.GetMyInfoDoc
+    @GetMapping("/me")
+    public ResponseEntity<UserInfoResponseDto> getMyInfo(Authentication authentication) {
+        return ResponseEntity.ok(authService.getMyInfo(authentication));
     }
 }
