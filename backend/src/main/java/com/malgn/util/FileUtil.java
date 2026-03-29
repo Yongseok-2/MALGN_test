@@ -47,4 +47,5 @@ public class FileUtil {
         int pos = originalFilename.lastIndexOf(".");
         return originalFilename.substring(pos + 1);
     }
+
 }

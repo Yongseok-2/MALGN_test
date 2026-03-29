@@ -31,7 +31,8 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "CM001", "해당 댓글을 찾을 수 없습니다."),
 
     // Attachment
-    FILE_UPLOAD_LIMIT(HttpStatus.BAD_REQUEST, "F001", "파일을 최대 10개까지 업로드 가능합니다.");
+    FILE_UPLOAD_LIMIT(HttpStatus.BAD_REQUEST, "F001", "파일을 최대 10개까지 업로드 가능합니다."),
+    FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "F002", "해당 파일을 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String code;
