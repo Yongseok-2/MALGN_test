@@ -21,6 +21,7 @@ erDiagram
     USERS ||--o{ CONTENTS : "작성 (writes)"
     USERS ||--o{ COMMENTS : "작성 (writes)"
     CONTENTS ||--o{ COMMENTS : "포함 (contains)"
+    CONTENTS ||--o{ ATTACHMENTS : "포함 (contains)"
 
     USERS {
         bigint id PK
