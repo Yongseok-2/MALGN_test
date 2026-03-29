@@ -21,6 +21,7 @@ erDiagram
     USERS ||--o{ CONTENTS : "작성 (writes)"
     USERS ||--o{ COMMENTS : "작성 (writes)"
     CONTENTS ||--o{ COMMENTS : "포함 (contains)"
+    CONTENTS ||--o{ ATTACHMENTS : "포함 (contains)"
 
     USERS {
         bigint id PK
@@ -50,6 +51,16 @@ erDiagram
         bigint content_id FK "게시글 ID"
         boolean deleted "논리 삭제 여부"
     }
+
+    ATTACHMENTS {
+            bigint id PK
+            varchar original_file_name "원본 파일 명"
+            varchar store_file_name "저장된 파일 명"
+            varchar file_path "파일 경로"
+            bigint file_size "파일의 크기"
+            varchar content_type "파일의 타입"
+            bigint content_id FK "게시글 ID"
+        }
 ```
 ## 3. 구현 내용
 
@@ -73,6 +84,9 @@ erDiagram
 * **관리자 페이지**
   - 일반 사용자는 접근할 수 없는 '삭제된 글 목록' 기능 구현
   - 삭제된 게시글을 다시 정상 상태로 되돌리는 '삭제 취소(복구)' 기능 구현
+* **파일 첨부 기능**
+  - multipart/form-data 형식을 지원하여 게시글과 함께 여러 개의 파일을 업로드할 수 있는 기능을 구현
+  - WebMvcConfigurer를 통해 외부 경로의 파일을 정적 리소스로 매핑하여, 컨트롤러를 거치지 않고 고성능으로 이미지를 호출 가능
 * **마이페이지 (내 글 보기)**
   - 현재 인증된 사용자가 작성한 게시글만 필터링하여 모아볼 수 있는 전용 API 제공
 * **댓글 시스템**
@@ -93,7 +107,7 @@ erDiagram
 
 * **사용한 AI 도구**:
   - Google Gemini
-  - Codex
+  - 프론트 -> Codex
 
 * **참고 자료**
   - 이전에 진행했던 프로젝트들
